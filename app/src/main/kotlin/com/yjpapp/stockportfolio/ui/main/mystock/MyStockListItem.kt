@@ -251,11 +251,10 @@ internal fun MyStockListItemWidget(
                             },
                             modifier = Modifier
                                 .padding(start = 5.dp)
-
                         )
-
+                        val zeroNumber = if (myStockData.dayToDayPercent.first().toString() == ".") "0" else ""
                         Text(
-                            text = "(${myStockData.dayToDayPercent}%)",
+                            text = "($zeroNumber${myStockData.dayToDayPercent}%)",
                             fontSize = 11.sp,
                             color = when {
                                 myStockData.dayToDayPrice.toInt() > 0 -> Color_CD4632

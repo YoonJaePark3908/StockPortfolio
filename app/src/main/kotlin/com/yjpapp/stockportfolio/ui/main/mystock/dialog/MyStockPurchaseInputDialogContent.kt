@@ -314,7 +314,7 @@ internal fun MyStockPurchaseInputDialogContent(
                                 ).show()
                                 return@TextButton
                             }
-                            if (purchaseCountText.toInt() == 0) {
+                            if (purchaseCountText.toBigDecimal().equals(0)) {
                                 Toast.makeText(
                                     context,
                                     context.getString(R.string.MyStockInputDialog_Error_Message_Purchase_Count),
