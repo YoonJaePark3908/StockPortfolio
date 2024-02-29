@@ -68,6 +68,7 @@ internal fun MyStockPurchaseInputDialogContent(
     dialogData: MyStockPurchaseInputDialogData = MyStockPurchaseInputDialogData(),
     onDismissRequest: (data: MyStockPurchaseInputDialogData, isComplete: Boolean) -> Unit
 ) {
+    val numberPattern = Regex("^\\d+\$")
     val context = LocalContext.current
     var rememberStockPriceInfo by remember { mutableStateOf(dialogData.stockPriceInfo) }
 //    var purchaseDateText by remember { mutableStateOf(dialogData.purchaseDate) }
@@ -168,11 +169,13 @@ internal fun MyStockPurchaseInputDialogContent(
                             value = purchasePriceText,
                             textStyle = TextStyle(fontSize = 14.sp, color = Color_222222),
                             onValueChange = {
-                                purchasePriceText = if (it.text.isNotEmpty()) {
+                                if (it.text.isEmpty()) {
+                                    purchasePriceText = TextFieldValue(text = it.text)
+                                } else if (it.text.last().toString().matches(numberPattern)) {
                                     val commaInsertedText = StockUtils.getNumInsertComma(it.text)
-                                    TextFieldValue(text = commaInsertedText, selection = TextRange(commaInsertedText.length))
-                                } else {
-                                    TextFieldValue(text = it.text)
+                                    purchasePriceText = TextFieldValue(text = commaInsertedText, selection = TextRange(commaInsertedText.length))
+                                } else if (!it.text.last().toString().matches(numberPattern)) {
+                                    Toast.makeText(context, context.getString(R.string.Msg_Only_Number), Toast.LENGTH_SHORT).show()
                                 }
                             },
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -233,7 +236,14 @@ internal fun MyStockPurchaseInputDialogContent(
                                 .padding(start = 10.dp),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             value = purchaseCountText,
-                            onValueChange = { purchaseCountText = it },
+                            onValueChange = {
+                                if (it.isEmpty()) {
+                                    purchaseCountText = ""
+                                } else if (it.matches(numberPattern)) {
+                                    purchaseCountText = it
+                                } else if (!it.matches(numberPattern)) {
+                                    Toast.makeText(context, context.getString(R.string.Msg_Only_Number), Toast.LENGTH_SHORT).show()
+                                } },
                             singleLine = true,
                             decorationBox = { innerTextField ->
                                 Column(

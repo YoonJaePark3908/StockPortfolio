@@ -74,10 +74,8 @@ object StockUtils {
     //5000000 => 5,000,000 변환
     fun getNumInsertComma(num: String): String {
         if (num.isEmpty()) return "0"
-        var result = ""
         val decimalFormat = DecimalFormat("###,###")
-        result = decimalFormat.format(num.replace(",", "").toDouble())
-        return result
+        return decimalFormat.format(num.replace(",", "").toBigDecimal())
     }
 
     //5000000 => $5,000,000 변환
