@@ -111,22 +111,22 @@ internal fun MyStockScreen(
             }
         }
         item { Spacer(modifier = Modifier.size(20.dp)) }
-        items(items = myStockUiState.myStockInfoList) { myStockData ->
-            MyStockListItemWidget(
-                viewModel = viewModel,
-                myStockData = myStockData,
-            )
-        }
-    }
-
-    if (myStockUiState.isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color_222222.copy(alpha = 0.3f)),
-            contentAlignment = Alignment.Center
-        ) {
-            LoadingWidget()
+        if (myStockUiState.isLoading) {
+            item {
+                Box(
+                    modifier = modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    LoadingWidget()
+                }
+            }
+        } else {
+            items(items = myStockUiState.myStockInfoList) { myStockData ->
+                MyStockListItemWidget(
+                    viewModel = viewModel,
+                    myStockData = myStockData,
+                )
+            }
         }
     }
 }
